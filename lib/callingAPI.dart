@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:apicalling/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,7 +9,7 @@ class ApiCalling extends StatefulWidget {
 }
 
 class _ApiCallingState extends State<ApiCalling> {
-  List<dynamic> users = [];
+  List<User> users = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +27,13 @@ class _ApiCallingState extends State<ApiCalling> {
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          final name = user['name']['first'];
-          final email = user['email'];
-          final imageUrl = user['picture']['thumbnail'];
+          final email = user.gender;
+          // final color = user.gender == 'male' ? Colors.orange : Colors.brown;
+
           return ListTile(
-            leading: ClipOval(
-              child: Image.network(
-                imageUrl,
-                height: 50,
-                width: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
-            title: Text(name),
-            subtitle: Text(email),
+            title: Text(user.name.title),
+            subtitle: Text(user.phone),
+            // tileColor: color,
           );
         },
       ),
@@ -52,14 +46,28 @@ class _ApiCallingState extends State<ApiCalling> {
 
   void fetchUsers() async {
     print("Fetching data...");
-    const url = 'https://randomuser.me/api/?results=100';
+    const url = 'https://randomuser.me/api/?results=30';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final body = response.body;
     final json = jsonDecode(body);
-
+    final results = json['results'] as List<dynamic>;
+    final transformed = results.map((e) {
+      final name = UserName(
+          title: e['name']['title'],
+          first: e['name']['first'],
+          last: e['name']['last']);
+      return User(
+        gender: e['gender'],
+        email: e['email'],
+        phone: e['phone'],
+        cell: e['cell'],
+        nat: e['nat'],
+        name: name,
+      );
+    }).toList();
     setState(() {
-      users = json['results'];
+      users = transformed;
     });
 
     print("Data fetched successfully.");
