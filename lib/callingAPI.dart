@@ -1,9 +1,6 @@
 import 'package:apicalling/serviceses/uiser_api.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-
 import 'models/user.dart';
-import 'models/username.dart';
 
 class ApiCalling extends StatefulWidget {
   @override
@@ -13,6 +10,7 @@ class ApiCalling extends StatefulWidget {
 class _ApiCallingState extends State<ApiCalling> {
   List<User> users = [];
 
+ // Method to fetch user data when the widget is initialized
   @override
   void initState() {
     super.initState();
@@ -47,40 +45,13 @@ class _ApiCallingState extends State<ApiCalling> {
     );
   }
 
+  // Method to fetch user data asynchronously
   Future<void> fetchUsers() async {
+
     final response = await UserApi.fetchUsers();
 
     setState(() {
       users = response;
     });
   }
-
-  // Future<void> fetchUsers() async {
-  //   print("Fetching data...");
-  //   const url = 'https://randomuser.me/api/?results=30';
-  //   final uri = Uri.parse(url);
-  //   final response = await http.get(uri);
-  //   final body = response.body;
-  //   final json = jsonDecode(body);
-  //   final results = json['results'] as List<dynamic>;
-  //   final transformed = results.map((e) {
-  //     final name = UserName(
-  //         title: e['name']['title'],
-  //         first: e['name']['first'],
-  //         last: e['name']['last']);
-  //     return User(
-  //       gender: e['gender'],
-  //       email: e['email'],
-  //       phone: e['phone'],
-  //       cell: e['cell'],
-  //       nat: e['nat'],
-  //       name: name,
-  //     );
-  //   }).toList();
-  //   setState(() {
-  //     users = transformed;
-  //   });
-
-  //   print("Data fetched successfully.");
-  // }
 }

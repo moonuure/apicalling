@@ -1,5 +1,4 @@
 import 'package:apicalling/models/username.dart';
-
 class User {
   final String gender;
   final String email;
@@ -18,6 +17,7 @@ class User {
   });
 
   String get FullName {
+    // Correcting the string interpolation syntax
     return '${name.title} {name.first} {name.last}';
   }
 }
