@@ -8,9 +8,9 @@ class ApiCalling extends StatefulWidget {
 }
 
 class _ApiCallingState extends State<ApiCalling> {
-  List<User> users = [];
+  List<User?> users = [];
 
- // Method to fetch user data when the widget is initialized
+  // Method to fetch user data when the widget is initialized
   @override
   void initState() {
     super.initState();
@@ -32,12 +32,12 @@ class _ApiCallingState extends State<ApiCalling> {
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          final email = user.gender;
+          final email = user!.gender;
           // final color = user.gender == 'male' ? Colors.orange : Colors.brown;
 
           return ListTile(
-            title: Text(user.name.title),
-            subtitle: Text(user.phone),
+            title: Text(user.name!.last.toString()),
+            subtitle: Text(user.location!.coordinates.toString()),
             // tileColor: color,
           );
         },
@@ -47,11 +47,11 @@ class _ApiCallingState extends State<ApiCalling> {
 
   // Method to fetch user data asynchronously
   Future<void> fetchUsers() async {
-
     final response = await UserApi.fetchUsers();
 
     setState(() {
       users = response;
     });
+    print("waa la helay Datada ${response}");
   }
 }
